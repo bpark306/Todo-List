@@ -1,0 +1,37 @@
+{
+  "name": "webpack-template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack serve --open --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bpark306/webpack-template.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/bpark306/webpack-template/issues"
+  },
+  "homepage": "https://github.com/bpark306/webpack-template#readme",
+  "devDependencies": {
+    "css-loader": "^7.1.5",
+    "csv-loader": "^3.0.5",
+    "express": "^5.2.1",
+    "html-loader": "^5.1.0",
+    "html-webpack-plugin": "^5.6.8",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.111.1",
+    "webpack-cli": "^7.2.3",
+    "webpack-dev-middleware": "^8.0.3",
+    "webpack-dev-server": "^5.2.3",
+    "webpack-merge": "^6.0.1",
+    "xml-loader": "^1.2.1"
+  }
+}
