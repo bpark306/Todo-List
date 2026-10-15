@@ -1,0 +1,55 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    text-decoration: none;
+    border: none;
+}
+body {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+}
+
+.projects {
+    grid-column: 2 / 3;
+    grid-row-start: 2;
+
+    list-style-type: none;
+}
+
+.edit {
+    width: 24px;
+    height: 24px;
+    background: none;
+    background-image: url("./dots.svg");
+}
+
+.add {
+    width: 24px;
+    height: 24px;
+    border: none;
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.project {
+    display: flex;
+    flex-direction: column;
+}
+
+.project-item {
+    padding: 16px;
+}
+
+.todo-item {
+    padding: 16px;
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+input {
+    font-size: 1.17em;
+}
