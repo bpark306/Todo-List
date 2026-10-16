@@ -1,28 +1,121 @@
 export function ProjectModel() {
 
-    const projects = [];
-    let currProject = null;
+    let projects = [];
+    
+    const saveData = () => {
+        const data = projects.map(project => ({
+            name: project.getName(),
+            todos: project.getTodo().map(task => ({
+                title: task.getTitle(),
+                dueDate: task.getDueDate(),
+            })),
+        }));
+        localStorage.setItem("projects", JSON.stringify(data));
+    }
+
+    const loadData = () => {
+        let data = localStorage.getItem("projects");
+
+        if (data === null) {
+            projects = [];
+            return
+            
+        } 
+        
+        try {
+            data = JSON.parse(data);
+
+            if (!Array.isArray(data)) {
+                throw new Error("Saved projects must be an array");
+            }
+
+            projects = data.map(item => {
+                const project = new Project();
+                project.setName(item.name);
+
+                item.todos.forEach(task => {
+                    project.addTodo(new Todo(task.title, task.dueDate));
+                });
+                return project;
+            });
+        } catch(err) {
+            console.error("Could not load saved data", err);
+            projects = []
+        }
+    }
 
     const addProject = (name) => {
         projects.push(new Project(name));
     }
 
+    const renameProject = (project, name) => {
+        if (project === null)  return;
+        project.setName(name);
+    }
+
+    const newTask = (name, dueDate) => {
+        return new Todo(name, dueDate);
+    }
+
+    const deleteProject = (project) => {
+        if (project === null) return;
+
+        projects.splice(projects.indexOf(project), 1);
+    }
 
     const getProjects = () => {
         return projects;
     }
 
-    return {addProject, getProjects}
+    const addTask = (project, formData) => {
+
+        if (project === null || formData === null) return;
+        const name = formData.get("add-task-name");
+        const date = formData.get("add-task-date");
+
+        project.addTodo(new Todo(name, date));
+    }
+
+    const editTask = (task, formData) => {
+        if (task === null || formData === null) return;
+
+        const name = formData.get("task-name");
+        const date = formData.get("task-date");
+        task.setTitle(name);
+        task.setDueDate(date);
+    }
+
+    const deleteTask = (project, uuid) => {
+        if (project === null) return;
+
+        const index = project.getTodo().find((task) => uuid === task.getUuid());
+
+        if (index === undefined) return;
+ 
+        project.getTodo().splice(index, 1);
+  
+    }
+
+
+    return {saveData, loadData, addProject, getProjects, renameProject, addTask, deleteProject, editTask, newTask, deleteTask}
 }
 
 
 class Project{
     #uuid;
     
-    constructor(name) {
+    constructor() {
         this.todoList = [];
-        this.name = name; 
+        this.name = null;
         this.#uuid = crypto.randomUUID();
+    }
+
+    setName(name) {
+        this.name = name;
+    }
+
+    getUuid() {
+        return this.#uuid;
     }
     getTodo() {
         return this.todoList;
@@ -33,9 +126,11 @@ class Project{
     }
 
     addTodo(todo) {
-        if (typeof(todo) !== "Todo" || todo === null) return;
-
-        this.todoList.push(todo);
+        if (todo instanceof Todo) {
+            this.todoList.push(todo);
+        } else if(typeof(todo) === "string") {
+            this.todoList.push(new Todo(todo));
+        }
     }
 
     removeTodo(uuid) {
@@ -57,34 +152,39 @@ class Todo {
     #priority;
     #note;
 
-    constructor(title, desc, dueDate, priority, notes) {
+    constructor(title, dueDate) {
         this.#uuid = crypto.randomUUID();
         this.#title = title;
-        this.#desc = desc;
         this.#dueDate = dueDate;
-        this.#priority = priority;
-        this.#note = notes;
     }
 
-    get getTitle() {
+    setTitle(title) {
+        this.#title = title;
+    }
+
+    getTitle() {
         return this.#title;
     }
-    get getDesc() {
+    getDesc() {
         return this.#desc;
     }
 
-    get getDueDate() {
+    getDueDate() {
         return this.#dueDate;
     }
 
-    get getPriority() {
+    setDueDate(date) {
+        this.#dueDate = date;
+    }
+
+    getPriority() {
         return this.#priority;
     }
 
-    get getNotes() {
+    getNotes() {
         return this.#note;
     }
-    get getUuid() {
+    getUuid() {
         return this.#uuid;
     }
 }

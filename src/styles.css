@@ -20,7 +20,7 @@ body {
     width: 24px;
     height: 24px;
     background: none;
-    background-image: url("./dots.svg");
+    background-image: url("./icons/close.svg");
 }
 
 .add {
@@ -43,6 +43,14 @@ body {
     padding: 16px;
 }
 
+.project-name::placeholder {
+    color: black;
+}
+
+.task-name::placeholder {
+    color: black;
+}
+
 .todo-item {
     padding: 16px;
     display: flex;
@@ -52,4 +60,26 @@ body {
 
 input {
     font-size: 1.17em;
+}
+
+#add-project {
+    font-size: 1.17em;
+    font-weight: bold;
+
+    border-radius: 4px;
+    padding: 8px 16px;
+    grid-column: 3 / 4;
+    
+    position: fixed;
+    bottom: 1em;
+    right: 3em;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.checkbox {
+    height: 100%;
 }
